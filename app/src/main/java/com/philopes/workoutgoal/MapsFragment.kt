@@ -53,14 +53,16 @@ class MapsFragment : Fragment() {
     private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
     private var mLocationPermissionGranted = false
 
-    data class Surroundings(
-        var mLikelyPlaceNames: ArrayList<String?> = arrayListOf(),
-        var mLikelyPlaceAddresses: ArrayList<String?> = arrayListOf(),
-        var mLikelyPlaceAttributions: ArrayList<String?> = arrayListOf(),
-        var mLikelyPlaceLatLngs: ArrayList<LatLng?> = arrayListOf(),
+    data class Surrounding(
+        var name: String?,
+        var addresses : String?,
+        var attributions: String?,
+        var latLng: LatLng?,
+        var type : List<Place.Type>?,
+        var id : String?
     )
 
-    private val surroundings : Surroundings = Surroundings()
+    private val surroundings : ArrayList<Surrounding> = arrayListOf()
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -132,7 +134,7 @@ class MapsFragment : Fragment() {
 
     private fun getCurrentPlaceLikelihoods(googleMap: GoogleMap) {
         // Use fields to define the data types to return.
-        val placeFields: List<Place.Field> = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.TYPES)
+        val placeFields: List<Place.Field> = listOf(Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.TYPES, Place.Field.ID)
 
         // Get the likely places - that is, the businesses and other points of interest that
         // are the best match for the device's current location.
@@ -145,16 +147,25 @@ class MapsFragment : Fragment() {
                     val response = task.result
 
                     for(placeLikelihood : PlaceLikelihood in response.placeLikelihoods){
-                        surroundings.mLikelyPlaceNames.add(placeLikelihood.place.name)
-                        surroundings.mLikelyPlaceAddresses.add(placeLikelihood.place.address)
                         val currPlaceAttributes = if(placeLikelihood.place.attributions == null) null else TextUtils.join("",placeLikelihood.place.attributions)
-                        surroundings.mLikelyPlaceAttributions.add(currPlaceAttributes)
-                        surroundings.mLikelyPlaceLatLngs.add(placeLikelihood.place.latLng)
-                        val currLatLng = surroundings.mLikelyPlaceAddresses.last() ?: ""
-                        Log.i(TAG, String.format("Place " + placeLikelihood.place.name + " has likelihood: " + placeLikelihood.likelihood + " at " + currLatLng.toString()))
+                        val surrounding = Surrounding(
+                            placeLikelihood.place.name,
+                            placeLikelihood.place.address,
+                            currPlaceAttributes,
+                            placeLikelihood.place.latLng,
+                            placeLikelihood.place.types,
+                            placeLikelihood.place.id
+                        )
+                        surroundings.add(surrounding)
+                        val currLatLng = surroundings.last().latLng ?: ""
+                        Log.i(TAG, String.format(
+                            "Place " + placeLikelihood.place.name +
+                            " types: " + placeLikelihood.place.types +
+                            " id: " + placeLikelihood.place.id +
+                            " has likelihood: " + placeLikelihood.likelihood + " at " + currLatLng.toString()))
                     }
 
-                    if(surroundings.mLikelyPlaceNames.isNotEmpty())
+                    if(surroundings.isNotEmpty())
                         addMarkers(googleMap)
                     else
                         Toast.makeText(requireContext(), "Empty surroundings",Toast.LENGTH_LONG).show()
@@ -207,14 +218,8 @@ class MapsFragment : Fragment() {
     }
 
     private fun addMarkers(googleMap: GoogleMap){
-        surroundings.mLikelyPlaceNames.forEachIndexed {
-            index, name ->
-            surroundings.mLikelyPlaceLatLngs[index]?.let {
-                googleMap.addMarker(MarkerOptions().position(it).title(name))
-            }
-
+        surroundings.forEach {
+            googleMap.addMarker(MarkerOptions().position(it.latLng!!).title(it.name))
         }
     }
-
-
 }
