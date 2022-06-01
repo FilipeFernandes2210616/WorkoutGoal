@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "737188648576",
+    "project_id": "workoutgoal",
+    "storage_bucket": "workoutgoal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:737188648576:android:a69936d733e8f03f3d3865",
+        "android_client_info": {
+          "package_name": "com.philopes.workoutgoal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "737188648576-bso943fb0re26aucc3mu0627cojmtb8p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.philopes.workoutgoal",
+            "certificate_hash": "be4e54e2f5918b35df66fd0e834dd7481554965a"
+          }
+        },
+        {
+          "client_id": "737188648576-lei7fsjed30tkc3i82ub9bgav0m5hfg4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGFq0EzuT8TEJ0CnJP7E9lO9Byp8_mXpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "737188648576-lei7fsjed30tkc3i82ub9bgav0m5hfg4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
