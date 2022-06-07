@@ -49,5 +49,7 @@
     <string name="pref_title_camerax_front_camera_target_resolution" translatable="false">CameraX front camera target resolution</string>
     <string name="pref_title_camera_live_viewport" translatable="false">Enable live viewport</string>
     <string name="pref_summary_camera_live_viewport" translatable="false">Do not block camera preview drawing on detection</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
