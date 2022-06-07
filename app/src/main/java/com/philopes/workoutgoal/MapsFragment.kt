@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.ApiException
 import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.google.android.gms.location.*
@@ -37,6 +38,7 @@ import com.google.android.libraries.places.api.model.PlaceLikelihood
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse
 import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
+import com.google.android.material.snackbar.Snackbar
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -44,6 +46,19 @@ import kotlin.collections.ArrayList
 
 class MapsFragment : Fragment() {
 
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
+        permissions ->
+        permissions.entries.forEach {
+            val permissionName = it.key
+            val isGranted = it.value
+            if (!isGranted) {
+                Log.e(TAG,"Permission denied: $permissionName")
+                mLocationPermissionGranted = false
+                return@registerForActivityResult
+            }
+        }
+        mLocationPermissionGranted = true
+    }
     // New variables for Current Place picker
     private val TAG = "MapsActivity"
     private lateinit var mPlacesClient : PlacesClient
@@ -198,6 +213,8 @@ class MapsFragment : Fragment() {
         geofencingClient = LocationServices.getGeofencingClient(requireActivity())
     }
 
+
+
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun getLocationPermission() {
         /*
@@ -211,7 +228,8 @@ class MapsFragment : Fragment() {
             ContextCompat.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true
         } else {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION), PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+            requestPermissions(this.requireView())
+            //ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION), PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
         }
     }
 
@@ -398,6 +416,29 @@ class MapsFragment : Fragment() {
         PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
+    private fun requestPermissions(view: View){
 
+        val permissions : Array<String> = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+
+        when{
+            ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED
+            -> {
+                Snackbar.make(view,"Permission Granted",Snackbar.LENGTH_LONG).show()
+                mLocationPermissionGranted = true
+            }
+
+            ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),Manifest.permission.ACCESS_FINE_LOCATION)  ||
+            ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(),Manifest.permission.ACCESS_BACKGROUND_LOCATION) -> {
+                Snackbar.make(view,"Requires Permissions",Snackbar.LENGTH_INDEFINITE).setAction("OK"){
+                    requestPermissionLauncher.launch(permissions)
+                }.show()
+            }
+
+            else -> {
+                requestPermissionLauncher.launch(permissions)
+            }
+        }
+    }
 
 }
