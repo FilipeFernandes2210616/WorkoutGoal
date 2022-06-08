@@ -58,19 +58,19 @@ import kotlin.random.Random
 class MapsFragment : Fragment() {
 
     companion object{
-        fun showNotification(context: Context, message : String){
+        fun showNotification(context: Context, title : String, message : String){
             val CHANNEL_ID = "GEOFENCE NOTIFICATION"
             var notificationID = Random(111).nextInt(1,30)
 
             val notificationBuilder = NotificationCompat.Builder(context,CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("GEOFENCE DETECTED")
-                .setStyle(NotificationCompat.BigTextStyle().bigText("YE!"))
+                .setContentTitle(title)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(message))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val channel = NotificationChannel(CHANNEL_ID,"App Name",NotificationManager.IMPORTANCE_DEFAULT).apply {
-                description = "App Name Description"
+            val channel = NotificationChannel(CHANNEL_ID,"WorkoutGoal",NotificationManager.IMPORTANCE_DEFAULT).apply {
+                description = "Description"
             }
 
             notificationManager.createNotificationChannel(channel)
@@ -249,7 +249,7 @@ class MapsFragment : Fragment() {
             .addGeofence(geofence)
             .build()
 
-        val intent = Intent(requireContext(), GeofenceReceiver::class.java).putExtra("ID",surrounding.id!!).putExtra("message","Entered a workout pin point")
+        val intent = Intent(requireContext(), GeofenceReceiver::class.java).putExtra("ID",surrounding.id!!)
 
         val pendingIntent = PendingIntent.getBroadcast(requireContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
 
