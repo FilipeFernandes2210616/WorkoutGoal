@@ -9,7 +9,7 @@
         android:title="Profile"
         android:icon="@drawable/ic_profile"/>
     <item
-        android:id="@+id/ranking"
+        android:id="@+id/rankingFragment"
         android:title="Ranking"
         android:icon="@drawable/ic_ranking"/>
 </menu>

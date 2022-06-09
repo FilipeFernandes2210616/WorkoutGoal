@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 navController.navigate(R.id.profileFragment)
                 return true
             }
-            R.id.ranking -> {
+            R.id.rankingFragment -> {
+                navController.navigate(R.id.rankingFragment)
                 return true
             }
         }
