@@ -7,6 +7,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.navigation.NavController
@@ -31,20 +33,25 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         NavigationUI.setupWithNavController(binding.bottomNavView,navController)
 
         binding.bottomNavView.setOnNavigationItemSelectedListener(this)
+
+        binding.btnStartChallenge.setOnClickListener {
+            if(onStartChallenge){
+                val intent = Intent(this, CameraActivity::class.java)
+                startActivity(intent);
+            }else{
+                Toast.makeText(applicationContext, "Walk to a pin location", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         when(p0.itemId){
-            R.id.start_challenge -> {
-                if(onStartChallenge){
-                    val intent = Intent(this, CameraActivity::class.java)
-                    startActivity(intent);
-                }else{
-                    Toast.makeText(applicationContext, "Walk to a pin location", Toast.LENGTH_SHORT).show()
-                }
+            R.id.mapsFragment -> {
+                navController.navigate(R.id.mapsFragment)
                 return true
             }
-            R.id.profile -> {
+            R.id.profileFragment -> {
+                navController.navigate(R.id.profileFragment)
                 return true
             }
             R.id.ranking -> {

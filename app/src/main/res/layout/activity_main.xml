@@ -21,6 +21,18 @@
             app:layout_constraintBottom_toTopOf="@id/bottomNavView"
             />
 
+        <ImageButton
+            android:id="@+id/btnStartChallenge"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottomNavView"
+            android:layout_marginBottom="18dp"
+            android:background="@color/quantum_cyan900"
+            android:src="@drawable/ic_start"
+            />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavView"
             android:layout_width="match_parent"
