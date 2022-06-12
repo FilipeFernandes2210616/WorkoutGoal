@@ -7,4 +7,5 @@ object Constants {
     const val CAMERA_ZOOM = 17f
     const val GEOFENCE_RADIUS = 20
     const val GEOFENCE_ID = "GEOFENCE_ID"
+    const val PLACE_ID = "PLACE_ID"
 }

@@ -20,4 +20,14 @@
         android:name="com.philopes.workoutgoal.RankingFragment"
         android:label="fragment_ranking"
         tools:layout="@layout/fragment_ranking" />
+    <activity
+        android:id="@+id/cameraActivity"
+        android:name="com.philopes.workoutgoal.CameraActivity"
+        android:label="activity_camera"
+        tools:layout="@layout/activity_camera">
+        <argument
+            android:name="place_id"
+            app:argType="string"
+            android:defaultValue="" />
+    </activity>
 </navigation>
