@@ -45,6 +45,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.material.snackbar.Snackbar
 import com.philopes.workoutgoal.data.models.Surrounding
+import com.philopes.workoutgoal.helpers.Constants
 import com.philopes.workoutgoal.helpers.Constants.CAMERA_ZOOM
 import com.philopes.workoutgoal.helpers.Constants.GEOFENCE_RADIUS
 import com.philopes.workoutgoal.helpers.Constants.MAPS_TAG
@@ -249,7 +250,7 @@ class MapsFragment : Fragment() {
             .addGeofence(geofence)
             .build()
 
-        val intent = Intent(requireContext(), GeofenceReceiver::class.java).putExtra("ID",surrounding.id!!)
+        val intent = Intent(requireContext(), GeofenceReceiver::class.java).putExtra(Constants.PLACE_ID,surrounding.id!!)
 
         val pendingIntent = PendingIntent.getBroadcast(requireContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT)
 

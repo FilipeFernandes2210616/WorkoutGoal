@@ -8,11 +8,12 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingEvent
 import com.philopes.workoutgoal.MainActivity
 import com.philopes.workoutgoal.MapsFragment
+import com.philopes.workoutgoal.helpers.Constants.PLACE_ID
 import java.lang.StringBuilder
 
 
 class GeofenceReceiver : BroadcastReceiver(){
-    lateinit var key : String
+    lateinit var placeId : String
     lateinit var title : String
     lateinit var message : String
 
@@ -21,12 +22,12 @@ class GeofenceReceiver : BroadcastReceiver(){
            val geofencingEvent = GeofencingEvent.fromIntent(intent)
            val geofenceTransition = geofencingEvent.geofenceTransition
 
-           key = intent.getStringExtra("key").toString()
+           placeId = intent.getStringExtra(PLACE_ID).toString()
 
            if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
                title = "Entered Workout Pin Location"
                message = "Try to break the Location's Workout Record"
-               MainActivity.enableStartChallenge()
+               MainActivity.enableStartChallenge(placeId)
            }else if(geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT){
                    title = "Exited Workout Pin Location"
                    message = "We showed them who is the boss!"

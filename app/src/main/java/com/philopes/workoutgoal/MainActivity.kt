@@ -11,6 +11,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.os.bundleOf
+import androidx.databinding.adapters.ToolbarBindingAdapter
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -36,8 +38,11 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         binding.btnStartChallenge.setOnClickListener {
             if(onStartChallenge){
-                val intent = Intent(this, CameraActivity::class.java)
-                startActivity(intent);
+                if(!placeId.isNullOrEmpty()){
+                    Toast.makeText(applicationContext, "PlaceID: $placeId", Toast.LENGTH_SHORT).show()
+                    val bundle = bundleOf("placeID" to placeId)
+                    navController.navigate(R.id.cameraActivity,bundle)
+                }
             }else{
                 Toast.makeText(applicationContext, "Walk to a pin location", Toast.LENGTH_SHORT).show()
             }
@@ -65,13 +70,16 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     companion object{
 
         var onStartChallenge = false
+        var placeId = ""
 
-        fun enableStartChallenge(){
+        fun enableStartChallenge(placeId : String){
             onStartChallenge = true
+            this.placeId = placeId
         }
 
         fun disableStartChallenge(){
             onStartChallenge = false
+            placeId = ""
         }
     }
 
