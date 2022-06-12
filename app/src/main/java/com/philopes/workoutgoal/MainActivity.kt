@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         binding.btnStartChallenge.setOnClickListener {
             if(onStartChallenge){
                 if(!placeId.isNullOrEmpty()){
-                    Toast.makeText(applicationContext, "Place ID: $placeId", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "PlaceID: $placeId", Toast.LENGTH_SHORT).show()
                     val bundle = bundleOf("placeID" to placeId)
                     navController.navigate(R.id.cameraActivity,bundle)
                 }
