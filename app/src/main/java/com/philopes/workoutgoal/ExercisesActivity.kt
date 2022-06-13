@@ -1,10 +1,13 @@
 package com.philopes.workoutgoal
 import CustomAdapter
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.philopes.workoutgoal.data.models.Record
+import com.philopes.workoutgoal.helpers.Constants
 import com.philopes.workoutgoal.helpers.UtilViewModel
 
 class ExercisesActivity : AppCompatActivity() {
@@ -27,8 +30,19 @@ class ExercisesActivity : AppCompatActivity() {
         )
 
         val adapter = CustomAdapter(data)
+
         // Setting the Adapter with the recyclerview
         recyclerview.adapter = adapter
+
+        adapter.setOnClickListener(object: CustomAdapter.OnClickListener{
+            override fun click(id: String) {
+                val record = intent.getSerializableExtra(Constants.RECORD) as Record
+                val intent = Intent(applicationContext,ScoreActivity::class.java)
+                record.exerciseId = id
+                intent.putExtra(Constants.RECORD,record)
+                startActivity(intent)
+            }
+        } )
 
     }
 }

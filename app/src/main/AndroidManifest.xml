@@ -53,6 +53,10 @@
             android:exported="false">
 
         </activity>
+        <activity android:name=".ScoreActivity"
+            android:exported="false">
+
+        </activity>
         <receiver android:name=".helpers.geofence.GeofenceReceiver"/>
     </application>
 

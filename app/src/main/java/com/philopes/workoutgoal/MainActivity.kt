@@ -10,7 +10,10 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.philopes.workoutgoal.data.models.Record
+import com.philopes.workoutgoal.data.models.User
 import com.philopes.workoutgoal.databinding.ActivityMainBinding
+import com.philopes.workoutgoal.helpers.Constants
 import com.philopes.workoutgoal.helpers.UtilViewModel
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener{
@@ -32,9 +35,10 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         binding.btnStartChallenge.setOnClickListener {
             if(onStartChallenge){
                 if(!placeId.isNullOrEmpty()){
-                    utilModel.placeId = placeId
                     Toast.makeText(applicationContext, "PlaceID: $placeId", Toast.LENGTH_SHORT).show()
-                    val bundle = bundleOf("placeID" to placeId)
+                    val user = intent.getSerializableExtra(Constants.USER) as User
+                    val record = Record(placeId,user,null,null)
+                    val bundle = bundleOf(Constants.RECORD to record)
                     navController.navigate(R.id.exercisesActivity,bundle)
                 }
             }else{
