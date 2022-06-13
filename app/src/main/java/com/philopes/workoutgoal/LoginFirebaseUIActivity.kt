@@ -6,11 +6,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig
-import com.firebase.ui.auth.AuthUI.IdpConfig.*
+import com.firebase.ui.auth.AuthUI.IdpConfig.GoogleBuilder
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
-import java.lang.Error
+import com.philopes.workoutgoal.data.models.User
 import java.util.*
 
 
@@ -24,7 +24,6 @@ class LoginFirebaseUIActivity : AppCompatActivity() {
         // Choose authentication providers
         // Choose authentication providers
         val providers: List<IdpConfig> = Arrays.asList(
-            EmailBuilder().build(),
             GoogleBuilder().build(),
         )
         // Create and launch sign-in intent
@@ -47,10 +46,12 @@ class LoginFirebaseUIActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             val user = FirebaseAuth.getInstance().currentUser
+            val userData = user?.let { User(it.uid,user.email.toString(),user.displayName.toString()) }
             if(user != null){
                 Toast.makeText(applicationContext,"Login: "+user.displayName +user.email, Toast.LENGTH_SHORT)
                 val intent = Intent(this, MainActivity::class.java).apply {
                     //putExtra(EXTRA_MESSAGE, user)
+                    putExtra("user_info",userData)
                 }
                 startActivity(intent);
             }
