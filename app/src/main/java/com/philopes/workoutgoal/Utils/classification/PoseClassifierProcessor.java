@@ -26,6 +26,7 @@ import androidx.annotation.WorkerThread;
 
 import com.google.common.base.Preconditions;
 import com.google.mlkit.vision.pose.Pose;
+import com.philopes.workoutgoal.CameraActivity;
 import com.philopes.workoutgoal.helpers.UtilViewModel;
 
 import java.io.BufferedReader;
@@ -38,9 +39,11 @@ import java.util.Locale;
 /**
  * Accepts a stream of {@link Pose} for classification and Rep counting.
  */
+
 public class PoseClassifierProcessor {
   private static final String TAG = "PoseClassifierProcessor";
   private static final String POSE_SAMPLES_FILE = "pose/fitness_pose_samples.csv";
+ // private static final String POSE_SAMPLES_FILE = "pose/fitness_poses_csvs_out_basic_pushups.csv";
 
   // Specify classes for which we want rep counting.
   // These are the labels in the given {@code POSE_SAMPLES_FILE}. You can set your own class labels
@@ -109,7 +112,6 @@ public class PoseClassifierProcessor {
     Preconditions.checkState(Looper.myLooper() != Looper.getMainLooper());
     List<String> result = new ArrayList<>();
     ClassificationResult classification = poseClassifier.classify(pose);
-    UtilViewModel utilViewModel = new UtilViewModel();
 
     // Update {@link RepetitionCounter}s if {@code isStreamMode}.
     if (isStreamMode) {
@@ -125,11 +127,14 @@ public class PoseClassifierProcessor {
       for (RepetitionCounter repCounter : repCounters) {
         int repsBefore = repCounter.getNumRepeats();
         int repsAfter = repCounter.addClassificationResult(classification);
+        Log.d(TAG, String.format( "%d reps", repsAfter));
         if (repsAfter > repsBefore) {
+          Log.d(TAG, "YO!!!!!!");
           // Play a fun beep when rep counter updates.
           ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
           tg.startTone(ToneGenerator.TONE_PROP_BEEP);
-          utilViewModel.setReps(repsAfter);
+          CameraActivity.reps = repsAfter;
+          //utilViewModel.setReps(repsAfter);
           lastRepResult = String.format(
               Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
           break;
@@ -139,6 +144,7 @@ public class PoseClassifierProcessor {
     }
 
     // Add maxConfidence class of current frame to result if pose is found.
+
     /*
     if (!pose.getAllPoseLandmarks().isEmpty()) {
       String maxConfidenceClass = classification.getMaxConfidenceClass();
@@ -150,7 +156,9 @@ public class PoseClassifierProcessor {
               / poseClassifier.confidenceRange());
       result.add(maxConfidenceClassResult);
     }
-    */
+
+     */
+
 
     return result;
   }
