@@ -30,4 +30,9 @@
             app:argType="string"
             android:defaultValue="" />
     </activity>
+    <activity
+        android:id="@+id/exercisesActivity"
+        android:name="com.philopes.workoutgoal.ExercisesActivity"
+        android:label="activity_exercises"
+        tools:layout="@layout/activity_exercises" />
 </navigation>
