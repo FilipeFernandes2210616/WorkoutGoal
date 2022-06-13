@@ -8,6 +8,16 @@ import com.philopes.workoutgoal.R
 
 class CustomAdapter(private val mList: List<String>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
+    private lateinit var onClickListener: OnClickListener
+    interface OnClickListener {
+        fun click(id: String)
+
+    }
+
+    fun setOnClickListener(onclick: OnClickListener){
+        this.onClickListener = onclick
+    }
+
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
@@ -26,8 +36,8 @@ class CustomAdapter(private val mList: List<String>) : RecyclerView.Adapter<Cust
         // sets the image to the imageview from our itemHolder class
         // sets the text to the textview from our itemHolder class
         holder.textView.text = text
-        holder.textView.setOnClickListener{
-
+        holder.itemView.setOnClickListener{
+            onClickListener.click(text)
         }
 
     }

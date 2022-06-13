@@ -3,15 +3,14 @@ package com.philopes.workoutgoal
 import android.Manifest
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.demo.kotlin.posedetector.PoseDetectorProcessor
@@ -20,10 +19,11 @@ import com.philopes.workoutgoal.Utils.CameraSourcePreview
 import com.philopes.workoutgoal.Utils.GraphicOverlay
 import com.philopes.workoutgoal.Utils.PreferenceUtils
 import com.philopes.workoutgoal.data.models.Record
+import com.philopes.workoutgoal.helpers.Constants
 import com.philopes.workoutgoal.helpers.UtilViewModel
 import com.philopes.workoutgoal.helpers.database.FirebaseDatabase
 import java.io.IOException
-import java.util.ArrayList
+
 
 class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener  {
 
@@ -31,12 +31,12 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
     private var preview: CameraSourcePreview? = null
     private var graphicOverlay: GraphicOverlay? = null
     private var selectedModel = POSE_DETECTION
+    val utilModel: UtilViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        val utilModel: UtilViewModel by viewModels()
 
         preview = findViewById(R.id.preview_view)
         if (preview == null) {
@@ -83,14 +83,8 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
                 // positive button text and action
                 .setPositiveButton("Guardar", DialogInterface.OnClickListener {
                         dialog, id ->
-
-                        val record = utilModel.placeId?.let { placeId -> utilModel.exerciseId?.let { exerciseId ->
-                            utilModel.reps?.let { reps ->
-                                Record(placeId,utilModel.user!!.userID,
-                                    exerciseId, reps
-                                )
-                            }
-                        } }
+                        val record = intent.getSerializableExtra(Constants.RECORD) as Record
+                        record.value = 10 //TODO: ATUALIZAR O VALOR PARA O VERDADEIRO
 
                         if(record != null){
                             FirebaseDatabase.registerChallenge(record)
