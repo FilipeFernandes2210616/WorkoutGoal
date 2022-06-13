@@ -19,7 +19,9 @@ import com.philopes.workoutgoal.Utils.CameraSource
 import com.philopes.workoutgoal.Utils.CameraSourcePreview
 import com.philopes.workoutgoal.Utils.GraphicOverlay
 import com.philopes.workoutgoal.Utils.PreferenceUtils
+import com.philopes.workoutgoal.data.models.Record
 import com.philopes.workoutgoal.helpers.UtilViewModel
+import com.philopes.workoutgoal.helpers.database.FirebaseDatabase
 import java.io.IOException
 import java.util.ArrayList
 
@@ -80,7 +82,21 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
                 .setCancelable(false)
                 // positive button text and action
                 .setPositiveButton("Guardar", DialogInterface.OnClickListener {
-                        dialog, id -> finish()
+                        dialog, id ->
+
+                        val record = utilModel.placeId?.let { placeId -> utilModel.exerciseId?.let { exerciseId ->
+                            utilModel.reps?.let { reps ->
+                                Record(placeId,utilModel.user!!.userID,
+                                    exerciseId, reps
+                                )
+                            }
+                        } }
+
+                        if(record != null){
+                            FirebaseDatabase.registerChallenge(record)
+                        }
+
+                        finish()
                 })
                     /*
                 // negative button text and action

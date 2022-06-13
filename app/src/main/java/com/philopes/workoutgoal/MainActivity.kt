@@ -3,6 +3,7 @@ package com.philopes.workoutgoal
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -10,11 +11,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.philopes.workoutgoal.databinding.ActivityMainBinding
+import com.philopes.workoutgoal.helpers.UtilViewModel
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener{
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController : NavController
+    val utilModel: UtilViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         binding.btnStartChallenge.setOnClickListener {
             if(onStartChallenge){
                 if(!placeId.isNullOrEmpty()){
+                    utilModel.placeId = placeId
                     Toast.makeText(applicationContext, "PlaceID: $placeId", Toast.LENGTH_SHORT).show()
                     val bundle = bundleOf("placeID" to placeId)
                     navController.navigate(R.id.exercisesActivity,bundle)
