@@ -2,6 +2,7 @@ package com.philopes.workoutgoal
 
 import android.Manifest
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.demo.kotlin.posedetector.PoseDetectorProcessor
@@ -16,6 +19,7 @@ import com.philopes.workoutgoal.Utils.CameraSource
 import com.philopes.workoutgoal.Utils.CameraSourcePreview
 import com.philopes.workoutgoal.Utils.GraphicOverlay
 import com.philopes.workoutgoal.Utils.PreferenceUtils
+import com.philopes.workoutgoal.helpers.UtilViewModel
 import java.io.IOException
 import java.util.ArrayList
 
@@ -29,6 +33,8 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
+
+        val utilModel: UtilViewModel by viewModels()
 
         preview = findViewById(R.id.preview_view)
         if (preview == null) {
@@ -59,6 +65,38 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
         }
 
          */
+
+        val check_button = findViewById<ImageButton>(R.id.check_button)
+        check_button.setOnClickListener {
+            // build alert dialog
+            val dialogBuilder = AlertDialog.Builder(this)
+
+            // set message of alert dialog
+            dialogBuilder.setMessage("O teu total:")
+            dialogBuilder.setMessage("10 \n")
+            dialogBuilder.setMessage("Record anterior: 1")
+            dialogBuilder.setMessage("Exercício: Squat")
+                // if the dialog is cancelable
+                .setCancelable(false)
+                // positive button text and action
+                .setPositiveButton("Guardar", DialogInterface.OnClickListener {
+                        dialog, id -> finish()
+                })
+                    /*
+                // negative button text and action
+                .setNegativeButton("Cancel", DialogInterface.OnClickListener {
+                        dialog, id -> dialog.cancel()
+                })
+
+                     */
+
+            // create dialog box
+            val alert = dialogBuilder.create()
+            // set title for alert dialog box
+            alert.setTitle("Novo Recorde!!")
+            // show alert dialog
+            alert.show()
+        }
 
         createCameraSource(selectedModel)
     }
@@ -217,7 +255,7 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
     companion object {
         private const val POSE_DETECTION = "Pose Detection"
 
-        private const val TAG = "LivePreviewActivity"
+        private const val TAG = "CameraActivity"
 
         private const val PERMISSION_REQUESTS = 1
 
