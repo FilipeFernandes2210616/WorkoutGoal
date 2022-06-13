@@ -26,6 +26,7 @@ import androidx.annotation.WorkerThread;
 
 import com.google.common.base.Preconditions;
 import com.google.mlkit.vision.pose.Pose;
+import com.philopes.workoutgoal.helpers.UtilViewModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,6 +50,7 @@ public class PoseClassifierProcessor {
   private static final String[] POSE_CLASSES = {
     PUSHUPS_CLASS, SQUATS_CLASS
   };
+
 
   private final boolean isStreamMode;
 
@@ -107,6 +109,7 @@ public class PoseClassifierProcessor {
     Preconditions.checkState(Looper.myLooper() != Looper.getMainLooper());
     List<String> result = new ArrayList<>();
     ClassificationResult classification = poseClassifier.classify(pose);
+    UtilViewModel utilViewModel = new UtilViewModel();
 
     // Update {@link RepetitionCounter}s if {@code isStreamMode}.
     if (isStreamMode) {
@@ -126,6 +129,7 @@ public class PoseClassifierProcessor {
           // Play a fun beep when rep counter updates.
           ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
           tg.startTone(ToneGenerator.TONE_PROP_BEEP);
+          utilViewModel.setReps(repsAfter);
           lastRepResult = String.format(
               Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
           break;
@@ -135,6 +139,7 @@ public class PoseClassifierProcessor {
     }
 
     // Add maxConfidence class of current frame to result if pose is found.
+    /*
     if (!pose.getAllPoseLandmarks().isEmpty()) {
       String maxConfidenceClass = classification.getMaxConfidenceClass();
       String maxConfidenceClassResult = String.format(
@@ -145,6 +150,7 @@ public class PoseClassifierProcessor {
               / poseClassifier.confidenceRange());
       result.add(maxConfidenceClassResult);
     }
+    */
 
     return result;
   }
