@@ -3,6 +3,7 @@ package com.philopes.workoutgoal
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.AuthUI.IdpConfig
@@ -11,11 +12,13 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.firebase.auth.FirebaseAuth
 import com.philopes.workoutgoal.data.models.User
+import com.philopes.workoutgoal.helpers.UtilViewModel
 import java.util.*
 
 
 class LoginFirebaseUIActivity : AppCompatActivity() {
 
+    val utilModel: UtilViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +51,7 @@ class LoginFirebaseUIActivity : AppCompatActivity() {
             val user = FirebaseAuth.getInstance().currentUser
             val userData = user?.let { User(it.uid,user.email.toString(),user.displayName.toString()) }
             if(user != null){
+                utilModel.user = userData
                 Toast.makeText(applicationContext,"Login: "+user.displayName +user.email, Toast.LENGTH_SHORT)
                 val intent = Intent(this, MainActivity::class.java).apply {
                     //putExtra(EXTRA_MESSAGE, user)
