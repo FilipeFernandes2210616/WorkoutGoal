@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import com.google.mlkit.vision.demo.kotlin.posedetector.PoseDetectorProcessor
 import com.philopes.workoutgoal.Utils.CameraSource
 import com.philopes.workoutgoal.Utils.CameraSourcePreview
@@ -24,6 +25,7 @@ import com.philopes.workoutgoal.helpers.UtilViewModel
 import com.philopes.workoutgoal.helpers.database.FirebaseDatabase
 import java.io.IOException
 
+private lateinit var utilModel: UtilViewModel
 
 class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, CompoundButton.OnCheckedChangeListener  {
 
@@ -31,12 +33,12 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
     private var preview: CameraSourcePreview? = null
     private var graphicOverlay: GraphicOverlay? = null
     private var selectedModel = POSE_DETECTION
-    val utilModel: UtilViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
+        utilModel = ViewModelProvider(this).get(UtilViewModel::class.java)
 
         preview = findViewById(R.id.preview_view)
         if (preview == null) {
@@ -74,36 +76,41 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
             val dialogBuilder = AlertDialog.Builder(this)
 
             // set message of alert dialog
-            dialogBuilder.setMessage("O teu total:")
-            dialogBuilder.setMessage("10 \n")
-            dialogBuilder.setMessage("Record anterior: 1")
-            dialogBuilder.setMessage("Exercício: Squat")
-                // if the dialog is cancelable
-                .setCancelable(false)
-                // positive button text and action
-                .setPositiveButton("Guardar", DialogInterface.OnClickListener {
-                        dialog, id ->
+            if(reps != null) {
+                dialogBuilder.setMessage("O teu total:")
+                dialogBuilder.setMessage("$reps")
+                dialogBuilder.setMessage("Record anterior: 1")
+                dialogBuilder.setMessage("Exercício: Squat")
+                    // if the dialog is cancelable
+                    .setCancelable(false)
+                    // positive button text and action
+                    .setPositiveButton("Guardar", DialogInterface.OnClickListener {
+                            dialog, id ->
                         val record = intent.getSerializableExtra(Constants.RECORD) as Record
-                        record.value = 10 //TODO: ATUALIZAR O VALOR PARA O VERDADEIRO
+                        record.value = reps?.toLong()
 
-                        if(record != null){
+                        record?.let {
                             FirebaseDatabase.registerChallenge(record)
                         }
 
-                        finish()
-                })
-                    /*
-                // negative button text and action
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener {
-                        dialog, id -> dialog.cancel()
-                })
 
-                     */
+                        finish()
+                    })
+            } else {
+                dialogBuilder.setMessage("Parece que não fizeste nenhuma repetição")
+                    // if the dialog is cancelable
+                    .setCancelable(false)
+                    // positive button text and action
+                    .setPositiveButton("Guardar", DialogInterface.OnClickListener {
+                            dialog, id ->
+                            finish()
+                    })
+            }
 
             // create dialog box
             val alert = dialogBuilder.create()
             // set title for alert dialog box
-            alert.setTitle("Novo Recorde!!")
+            alert.setTitle(if(reps != null) "Novo Recorde!!" else "Ups")
             // show alert dialog
             alert.show()
         }
@@ -264,6 +271,9 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
 
     companion object {
         private const val POSE_DETECTION = "Pose Detection"
+
+        @JvmField
+        var reps: Int? = null
 
         private const val TAG = "CameraActivity"
 
