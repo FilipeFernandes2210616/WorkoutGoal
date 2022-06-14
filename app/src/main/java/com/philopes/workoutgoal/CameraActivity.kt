@@ -74,26 +74,22 @@ class CameraActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener, 
         check_button.setOnClickListener {
             // build alert dialog
             val dialogBuilder = AlertDialog.Builder(this)
-
+            val record = intent.getSerializableExtra(Constants.RECORD) as Record
             // set message of alert dialog
             if(reps != null) {
                 dialogBuilder.setMessage("O teu total:")
                 dialogBuilder.setMessage("$reps")
-                dialogBuilder.setMessage("Record anterior: 1")
-                dialogBuilder.setMessage("Exercício: Squat")
+                dialogBuilder.setMessage("Exercício: ${record.exerciseId}")
                     // if the dialog is cancelable
                     .setCancelable(false)
                     // positive button text and action
                     .setPositiveButton("Guardar", DialogInterface.OnClickListener {
                             dialog, id ->
-                        val record = intent.getSerializableExtra(Constants.RECORD) as Record
                         record.value = reps?.toLong()
 
                         record?.let {
                             FirebaseDatabase.registerChallenge(record)
                         }
-
-
                         finish()
                     })
             } else {
