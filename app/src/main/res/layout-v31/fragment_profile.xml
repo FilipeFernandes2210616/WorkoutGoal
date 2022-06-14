@@ -23,13 +23,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:text="Nome Utilizador"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/system_accent2_600"
                 app:layout_constraintBottom_toTopOf="@+id/useremail"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_conversion_absoluteHeight="19dp"
-                tools:layout_conversion_absoluteWidth="101dp"
-                android:textSize="10pt"/>
+                tools:layout_conversion_absoluteWidth="101dp" />
 
             <TextView
                 android:id="@+id/useremail"
@@ -37,13 +36,11 @@
                 android:layout_height="wrap_content"
                 android:text="email@user.com"
                 android:textColor="@color/teal_700"
-                android:textSize="7pt"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.493"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.601"
                 tools:layout_conversion_absoluteHeight="19dp"
                 tools:layout_conversion_absoluteWidth="105dp" />
 
