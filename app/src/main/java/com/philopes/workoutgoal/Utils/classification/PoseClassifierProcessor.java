@@ -129,12 +129,10 @@ public class PoseClassifierProcessor {
         int repsAfter = repCounter.addClassificationResult(classification);
         Log.d(TAG, String.format( "%d reps", repsAfter));
         if (repsAfter > repsBefore) {
-          Log.d(TAG, "YO!!!!!!");
           // Play a fun beep when rep counter updates.
           ToneGenerator tg = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
           tg.startTone(ToneGenerator.TONE_PROP_BEEP);
           CameraActivity.reps = repsAfter;
-          //utilViewModel.setReps(repsAfter);
           lastRepResult = String.format(
               Locale.US, "%s : %d reps", repCounter.getClassName(), repsAfter);
           break;
