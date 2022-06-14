@@ -39,7 +39,7 @@ class ScoreActivity : AppCompatActivity() {
             override fun onDataChange(it : DataSnapshot) {
                 val result = it.child(record.placeId).child(record.exerciseId!!)
                 for(users : DataSnapshot in result.children){
-                    data.add(users.key!!+": "+users.value as Long?)
+                    data.add(users.value as String)
                 }
                 adapter = CustomAdapter(data)
                 recyclerview.adapter = adapter
