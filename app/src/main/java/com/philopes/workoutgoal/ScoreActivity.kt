@@ -3,7 +3,7 @@ package com.philopes.workoutgoal
 import CustomAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +54,7 @@ class ScoreActivity : AppCompatActivity() {
         }
 
         // Setting the Adapter with the recyclerview
-        val button= findViewById<Button>(R.id.button_startChallenge)
+        val button= findViewById<ImageButton>(R.id.btn_StartChallenge)
 
         button.setOnClickListener(){
             val intent = Intent(applicationContext,CameraActivity::class.java)
