@@ -20,7 +20,7 @@ class FirebaseDatabase() {
 
         fun registerChallenge(record : Record) : Boolean{
             if(record.exerciseId != null){
-                return database.child(record.placeId).child(record.exerciseId!!).child(record.user!!.userID).setValue(record.value).isSuccessful
+                return database.child(record.placeId).child(record.exerciseId!!).child(record.user!!.userID).setValue(record.user!!.displayName+"("+record.user.email+"): "+record.value).isSuccessful
             }
             return false
         }

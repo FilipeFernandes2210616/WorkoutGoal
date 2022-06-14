@@ -48,13 +48,15 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        val user = intent.getSerializableExtra(Constants.USER) as User
+        val bundle = bundleOf(Constants.USER to user)
         when(p0.itemId){
             R.id.mapsFragment -> {
                 navController.navigate(R.id.mapsFragment)
                 return true
             }
             R.id.profileFragment -> {
-                navController.navigate(R.id.profileFragment)
+                navController.navigate(R.id.profileFragment,bundle)
                 return true
             }
             R.id.rankingFragment -> {
